@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Clock, Trash2, User } from "lucide-react";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import { LANGUAGE_CONFIG } from "../HomeComponent/Constants";
+import { toast, Bounce } from "react-toastify";
 
-export const SnippetCard = ({ snippet }) => {
+export const SnippetCard = ({ snippet, setSnippets }) => {
   const { user } = useUser();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -37,8 +38,21 @@ export const SnippetCard = ({ snippet }) => {
         throw new Error("Server did not return JSON");
       }
 
-      await response.json();
-      toast.success("Snippet deleted successfully", { position: "top-center" });
+      const data = await response.json();
+      console.log(data)
+      toast.success("Snippet Deleted successfully", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+      // ✅ Remove deleted snippet from UI
+      setSnippets((prevSnippets) => prevSnippets.filter((s) => s._id !== snippet_id));
     } catch (error) {
       console.error("Error deleting snippet:", error);
       toast.error("Error deleting snippet");

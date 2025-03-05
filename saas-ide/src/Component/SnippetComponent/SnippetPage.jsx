@@ -203,7 +203,8 @@ export const SnippetsPage = () => {
         >
           <AnimatePresence mode="popLayout">
             {filteredSnippets.map((snippet) => (
-              <SnippetCard key={snippet._id} snippet={snippet} />
+              // <SnippetCard key={snippet._id} snippet={snippet} />
+              <SnippetCard key={snippet._id} snippet={snippet} setSnippets={setSnippets} />
             ))}
           </AnimatePresence>
         </motion.div>
