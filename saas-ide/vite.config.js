@@ -6,6 +6,6 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   optimizeDeps: {
-    include: ["lucide-react"],
+    include: ["lucide-react", "framer-motion"], // ✅ Correct syntax
   },
 });
