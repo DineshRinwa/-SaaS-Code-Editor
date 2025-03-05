@@ -1,12 +1,10 @@
 import "./App.css";
-import {Navbar} from "./Component/Navbar";
 import { AllRoute } from "./Component/AllRoutes";
-import { Home } from "./Pages/Home"
 
 function App() {
   return (
-    <div className="">
-      <Navbar/>
+    <div>
+      <div className="bg-amber-500 text-md text-center tracking-wide">Make sure to refresh the app when sharing snippets due to Clerk.!</div>
       <AllRoute/>
     </div>
   );

@@ -9,16 +9,6 @@ export const RunButton = () => {
 
   const handleRun = async () => {
     await runCode();
-    // const result = getExecutionResult();
-
-    // if (user && result) {
-    //   await saveExecution({
-    //     language,
-    //     code: result.code,
-    //     output: result.output || undefined,
-    //     error: result.error || undefined,
-    //   });
-    // }
   };
 
 

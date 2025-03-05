@@ -32,8 +32,8 @@ const LANGUAGE_CONFIG = {
     logoPath: javaLogo,
     pistonRuntime: { language: "java", version: "15.0.2" },
   },
-  cplusplus: {
-    id: "cplusplus",
+  cpp: {
+    id: "cpp",
     label: "C++",
     logoPath: cppLogo,
     pistonRuntime: { language: "cpp", version: "10.2.0" },

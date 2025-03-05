@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import { useCodeEditor } from "../../Context/CodeEditorContext";
 import { Editor } from "@monaco-editor/react";
 import { LANGUAGE_CONFIG, defineMonacoThemes } from "./Constants/index";
+import { ShareSnippetDialog } from "../ShareSnippetDialog";
+
+import { Bounce, toast } from "react-toastify";
 
 export const EditorPanel = () => {
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
@@ -34,6 +37,27 @@ export const EditorPanel = () => {
     const size = Math.min(Math.max(newSize, 12), 24);
     setFontSize(size);
     localStorage.setItem("editor-font-size", size.toString());
+  };
+
+  // Share Btn click
+  const handleShareBtnClick = () => {
+    const auth = localStorage.getItem("authToken");
+
+    if (auth) {
+      setIsShareDialogOpen(true);
+    } else {
+      toast.warn("Sign in now and share snippents!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+    }
   };
 
   return (
@@ -93,7 +117,7 @@ export const EditorPanel = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setIsShareDialogOpen(true)}
+              onClick={handleShareBtnClick}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 opacity-90 hover:opacity-100 transition-opacity cursor-pointer"
             >
               <Share className="size-4 text-white" />
