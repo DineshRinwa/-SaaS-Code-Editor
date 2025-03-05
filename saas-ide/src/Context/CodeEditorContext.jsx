@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { Moon, Sun, Laptop, Cloud, Github } from "lucide-react";
+import { Moon, Sun, Laptop, Cloud } from "lucide-react";
+
 
 // Import images manually (Recommended)
 import jsLogo from "../assets/javascript.png";
@@ -92,7 +93,8 @@ const THEMES = [
   {
     id: "github-dark",
     label: "GitHub Dark",
-    icon: <Github className="size-4" />,
+    icon: <Moon className="size-4" />,
+    // icon: <Github className="size-4" />,
     color: "#0d1117",
   },
   {
