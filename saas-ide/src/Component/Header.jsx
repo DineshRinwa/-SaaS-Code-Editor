@@ -148,13 +148,6 @@ export const Header = () => {
                       </motion.button>
                     </SignInButton>
                   </SignedOut>
-
-                  <SignedIn>
-                    <RunButton />
-                    <div className="pl-3 border-l border-gray-700">
-                      <UserButton />
-                    </div>
-                  </SignedIn>
                 </>
               )}
             </div>
