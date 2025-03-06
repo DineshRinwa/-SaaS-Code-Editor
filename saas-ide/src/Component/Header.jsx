@@ -4,7 +4,7 @@ import { Language } from "./Language";
 import { motion } from "framer-motion";
 import { Blocks, Code2, LogOut, Sparkles } from "lucide-react";
 import { RunButton } from "./RunButton";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import {
   SignedIn,
@@ -19,7 +19,13 @@ export const Header = () => {
   const { user } = useUser();
   const email = user?.primaryEmailAddress?.emailAddress;
   const name = `${user?.firstName || ""} ${user?.lastName || ""}`.trim();
-  let isPro;
+  const [authLoaded, setAuthLoaded] = useState(false);
+  const [isPro, setIsPro] = useState(false);
+
+  // Wait for Clerk auth to load before showing UI
+  useEffect(() => {
+    setAuthLoaded(true);
+  }, []);
 
   // Function to handle token storage
   const handleAuthToken = useCallback(async () => {
@@ -37,12 +43,15 @@ export const Header = () => {
   const createUser = useCallback(async () => {
     if (!user) return;
 
-    try { 
-      const response = await fetch("https://saas-code-editor-backend-2.onrender.com/api/users", {  
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ clerkUserId: user.id, email, name }),
-      });
+    try {
+      const response = await fetch(
+        "https://saas-code-editor-backend-2.onrender.com/api/users",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ clerkUserId: user.id, email, name }),
+        }
+      );
 
       if (!response.ok) {
         console.error("Failed to add user:", errorMessage);
@@ -51,7 +60,7 @@ export const Header = () => {
 
       const data = await response.json();
       localStorage.setItem("user_name", data.user.name);
-      isPro = data.user.isPro;
+      setIsPro(data.user.isPro); // ✅ Correct way to update state
     } catch (error) {
       console.error("Error in user creation request:", error);
     }
@@ -104,7 +113,7 @@ export const Header = () => {
             </div>
 
             {/* work is remaing here */}
-            {!false && (
+            {isPro && (
               <Link
                 to="/pricing"
                 className="flex items-center gap-2 px-4 py-1.5 rounded-lg border border-amber-500/20 hover:border-amber-500/40 bg-gradient-to-r from-amber-500/10 
@@ -119,31 +128,41 @@ export const Header = () => {
             )}
 
             <div className="pl-3 border-l border-gray-700">
-            <SignedOut>
-              {/* <div className="pl-3 border-4 border-gray-800" /> */}
-              <SignInButton mode="modal">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  type="button" // Added for accessibility
-                  className="group relative inline-flex items-center gap-2.5 px-5 py-2.5 focus:outline-none cursor-pointer"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-900 rounded-xl opacity-100 transition-opacity group-hover:opacity-90" />
-                  <div className="relative flex items-center gap-2.5">
-                    <LogOut className="w-6 h-6 text-white font-bold" />
-                    <span className="text-md font-medium text-white/90 group-hover:text-white tracking-wide">
-                      Sign In
-                    </span>
-                  </div>
-                </motion.button>
-              </SignInButton>
-            </SignedOut>
+              {!authLoaded ? null : (
+                <>
+                  <SignedOut>
+                    <SignInButton mode="modal">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="button"
+                        className="group relative inline-flex items-center gap-2.5 px-5 py-2.5 focus:outline-none cursor-pointer"
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-900 rounded-xl opacity-100 transition-opacity group-hover:opacity-90" />
+                        <div className="relative flex items-center gap-2.5">
+                          <LogOut className="w-6 h-6 text-white font-bold" />
+                          <span className="text-md font-medium text-white/90 group-hover:text-white tracking-wide">
+                            Sign In
+                          </span>
+                        </div>
+                      </motion.button>
+                    </SignInButton>
+                  </SignedOut>
+
+                  <SignedIn>
+                    <RunButton />
+                    <div className="pl-3 border-l border-gray-700">
+                      <UserButton />
+                    </div>
+                  </SignedIn>
+                </>
+              )}
             </div>
 
             <SignedIn>
               <RunButton />
               <div className="pl-3 border-l border-gray-700">
-              <UserButton />
+                <UserButton />
               </div>
             </SignedIn>
           </div>
