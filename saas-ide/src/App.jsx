@@ -4,8 +4,12 @@ import { AllRoute } from "./Component/AllRoutes";
 function App() {
   return (
     <div>
-      <div className="bg-amber-500 text-black text-md text-center tracking-wides">If the Sign In button is not visible, refresh the app. This may also affect snippet sharing due to Clerk !</div>
-      <AllRoute/>
+      <p className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold font-sans text-md text-center tracking-wider py-2 rounded-lg shadow-md">
+        For the best experience, please use this app in the Chrome browser!
+        (Clerk)
+      </p>
+
+      <AllRoute />
     </div>
   );
 }

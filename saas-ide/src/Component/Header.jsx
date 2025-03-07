@@ -39,6 +39,7 @@ export const Header = () => {
     }
   }, [isSignedIn, getToken]);
 
+
   // Function to create/update user in DB
   const createUser = useCallback(async () => {
     if (!user) return;
