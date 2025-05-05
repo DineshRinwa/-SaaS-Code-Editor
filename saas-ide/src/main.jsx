@@ -1,41 +1,43 @@
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import { BrowserRouter } from "react-router-dom";
-import { ClerkProvider } from "@clerk/clerk-react";
-import { CodeEditorProvider } from "./Context/CodeEditorContext.jsx";
-
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Bounce } from "react-toastify";
 
-// Import your Publishable Key
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
-}
+import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "./store/Theme/ThemeContext.jsx";
+import { LanguageProvider } from "./store/Language/LanguageContext.jsx";
+import { CodeEditorProvider } from "./store/Code/CodeEditorContext.jsx";
+import { AuthProvider } from "./store/Auth/AuthContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} clerkJSVersion="5.23.0">
-      <CodeEditorProvider>
-        <ToastContainer
-          position="top-center"
-          autoClose={2000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-          transition={Bounce}
-        />
-        <App />
-      </CodeEditorProvider>
-    </ClerkProvider>
-  </BrowserRouter>
+  <StrictMode>
+    <BrowserRouter>
+      <AuthProvider>
+        <ThemeProvider>
+          <LanguageProvider>
+            <CodeEditorProvider>
+              <App />
+
+              {/* Toast container - renders all toasts */}
+              <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+              />
+            </CodeEditorProvider>
+          </LanguageProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  </StrictMode>
 );

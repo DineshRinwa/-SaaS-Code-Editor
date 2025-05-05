@@ -23,6 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-# Enivarment
+# .gitignore file
 .env
-package-lock.json
