@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import jsLogo from "../../assets/javaScript.png";
+import jsLogo from "../../assets/javascript.png";
 import pythonLogo from "../../assets/python.png";
 import javaLogo from "../../assets/java.png";
 import cppLogo from "../../assets/cpp.png";
