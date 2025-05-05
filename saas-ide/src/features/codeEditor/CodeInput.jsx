@@ -20,7 +20,7 @@ export const EditorPanel = ({ isFullSize, toggleSize }) => {
   const { language } = useLanguage();
   const { fontSize, editor, setFontSize, setEditor } = useCodeEditor();
 
-  // Check user authentication status on load
+  // Check user authentication status and update userData
   const checkAuthStatus = () => {
     try {
       const authData = localStorage.getItem("auth");
@@ -28,12 +28,17 @@ export const EditorPanel = ({ isFullSize, toggleSize }) => {
         const parsedData = JSON.parse(authData);
         setUserData(parsedData);
         setIsAuthenticated(true);
+        return { isAuthenticated: true, userData: parsedData };
       } else {
         setIsAuthenticated(false);
+        setUserData(null);
+        return { isAuthenticated: false, userData: null };
       }
     } catch (error) {
       console.error("Error parsing auth data:", error);
       setIsAuthenticated(false);
+      setUserData(null);
+      return { isAuthenticated: false, userData: null };
     }
   };
 
@@ -70,8 +75,10 @@ export const EditorPanel = ({ isFullSize, toggleSize }) => {
 
   // Open share dialog if authenticated; otherwise, show warning
   const handleShareBtnClick = () => {
-    const authData = localStorage.getItem("auth");
-    if (authData) {
+    // Always check auth status right before sharing to ensure we have latest data
+    const { isAuthenticated, userData: freshUserData } = checkAuthStatus();
+    
+    if (isAuthenticated && freshUserData) {
       setIsShareDialogOpen(true);
     } else {
       showAuthWarning();
